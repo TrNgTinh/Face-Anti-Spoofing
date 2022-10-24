@@ -21,8 +21,6 @@ warnings.filterwarnings('ignore')
 
 SAMPLE_IMAGE_PATH = "./images/sample/"
 
-
-# 因为安卓端APK获取的视频流宽高比为3:4,为了与之一致，所以将宽高比限制为3:4
 def check_image(image):
     height, width, channel = image.shape
     if width/height != 3/4:
@@ -57,31 +55,30 @@ def test(image, model_dir, device_id):
         if scale is None:
             param["crop"] = False
         img = image_cropper.crop(**param)
-        print(img.shape)
-        cv2.imwrite(img=img,filename='test.jpg')
         start = time.time()
         prediction += model_test.predict(img, os.path.join(model_dir, model_name))
         test_speed += time.time()-start
         count_model +=1
-        print(model_name)
-    print(count_model)
     # draw result of prediction
     label = np.argmax(prediction)
     value = prediction[0][label]/count_model
+    #print(prediction)
+
     if label == 1:
         if value>=0.98:
-            print("Image '{}' is Real Face. Score: {:.2f}.".format(1, value))
+            #print("Image '{}' is Real Face. Score: {:.2f}.".format(1, value))
             result_text = "RealFace Score: {:.2f}".format(value)
             color = (255, 0, 0)
         else:
-            print("Image '{}' is Fake Face. Score: {:.2f}.".format(1, value))
+            #print("Image '{}' is Fake Face. Score: {:.2f}.".format(1, value))
             result_text = "RealFace Score: {:.2f}".format(value)
             color = (0, 0, 255)
     else:
-        print("Image '{}' is Fake Face. Score: {:.2f}.".format(1, value))
+        #print(label)
+        #print("Image '{}' is Fake Face. Score: {:.2f}.".format(1, value))
         result_text = "FakeFace Score: {:.2f}".format(value)
         color = (0, 0, 255)
-    print("Prediction cost {:.2f} s".format(test_speed))
+    #print("Prediction cost {:.2f} s".format(test_speed))
     cv2.rectangle(
         image,
         (image_bbox[0], image_bbox[1]),

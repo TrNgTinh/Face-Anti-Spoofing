@@ -36,12 +36,15 @@ if __name__ == '__main__':
     cap = cv2.VideoCapture(0)
     cap.set(3,1280)
     cap.set(4,720)
+    count = 0 
     while cap.isOpened():
         isSuccess,frame = cap.read()
         if isSuccess:
             test(frame,args.model_dir, args.device_id) 
             cv2.imshow('face Capture', frame)
-
+        count += 1
+        if count ==10:
+            break
         if cv2.waitKey(1)&0xFF == ord('q'):
             break
     cap.release()

@@ -1,9 +1,8 @@
-[中文版](README.md)|**English Version**  
+
 ![Silent-Face-Anti-Spoofing](https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/logo.jpg)  
 # Silent-Face-Anti-Spoofing 
 
-This project is Silent-Face-Anti-Spoofing belongs to [minivision technology](https://www.minivision.cn/). You can scan the QR code below to get APK and install it on Android side to experience the effect of real time living detection(silent face anti-spoofing detection).   
-<img src="https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/静默活体APK.jpeg" width="200" height="200" align=center />  
+This project is Silent-Face-Anti-Spoofing belongs to [minivision technology](https://www.minivision.cn/). 
 
 ## Introduction
 
@@ -23,10 +22,6 @@ By using our self-developed model pruning method, the FLOPs of MobileFaceNet is 
 |MobileFaceNet|0.224G|0.991M|
 |MiniFASNetV1|0.081G|0.414M|
 |MiniFASNetV2|0.081G|0.435M|
-
-## APK
-### APK source code  
-Open source for Android platform deployment code: https://github.com/minivision-ai/Silent-Face-Anti-Spoofing-APK  
 
 ### Demo
 <img src="https://github.com/minivision-ai/Silent-Face-Anti-Spoofing/blob/master/images/demo.gif" width="300" height="400"/>  

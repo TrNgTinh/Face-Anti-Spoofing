@@ -6,11 +6,14 @@
 # @Software : PyCharm
 
 import os
+from tkinter import W
 import cv2
 import math
 import torch
 import numpy as np
 import torch.nn.functional as F
+from torchsummary import summary
+import onnxruntime
 
 
 from src.model_lib.MiniFASNet import MiniFASNetV1, MiniFASNetV2,MiniFASNetV1SE,MiniFASNetV2SE
@@ -23,7 +26,10 @@ MODEL_MAPPING = {
     'MiniFASNetV1SE':MiniFASNetV1SE,
     'MiniFASNetV2SE':MiniFASNetV2SE
 }
-
+def softmax(x):
+    """Compute softmax values for each sets of scores in x."""
+    e_x = np.exp(x - np.max(x))
+    return e_x / e_x.sum()
 
 class Detection:
     def __init__(self):
@@ -39,7 +45,6 @@ class Detection:
             img = cv2.resize(img,
                              (int(192 * math.sqrt(aspect_ratio)),
                               int(192 / math.sqrt(aspect_ratio))), interpolation=cv2.INTER_LINEAR)
-
         blob = cv2.dnn.blobFromImage(img, 1, mean=(104, 117, 123))
         self.detector.setInput(blob, 'data')
         out = self.detector.forward('detection_out').squeeze()
@@ -89,6 +94,15 @@ class AntiSpoofPredict(Detection):
         with torch.no_grad():
             result = self.model.forward(img)
             result = F.softmax(result).cpu().numpy()
+        return result
+    def predict_onnx(self, img, model_path_onnx):
+        img = img.transpose((2, 0, 1))
+        img = np.expand_dims(img, 0)
+        img = img.astype('float32')
+        ort_sess = onnxruntime.InferenceSession(model_path_onnx)
+        ort_inputs = {ort_sess.get_inputs()[0].name: img}
+        ort_outs = ort_sess.run(None, ort_inputs)
+        result = softmax(ort_outs[0])
         return result
 
 

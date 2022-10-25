@@ -84,44 +84,26 @@ class AntiSpoofPredict(Detection):
         return None
 
     def predict(self, img, model_path):
-        print(img.shape)
         test_transform = trans.Compose([
             trans.ToTensor(),
         ])
         img = test_transform(img)
-        print(img.shape)
         img = img.unsqueeze(0).to(self.device)
         self._load_model(model_path)
         self.model.eval()
-        print(img, img.shape)
         with torch.no_grad():
             result = self.model.forward(img)
-            print(result,result.shape)
             result = F.softmax(result).cpu().numpy()
-        print(result,result.shape)
         return result
     def predict_onnx(self, img, model_path_onnx):
-        #print(img)
-        #img = (img - 127.5) * 0.00784313725
-        img = img[:, :, ::-1]
         img = img.transpose((2, 0, 1))
         img = np.expand_dims(img, 0)
         img = img.astype('float32')
         ort_sess = onnxruntime.InferenceSession(model_path_onnx)
-        #test_transform = trans.Compose([
-            #trans.ToTensor(),
-        #])
-        #img = test_transform(img) 
-        #img = img.unsqueeze(0).to(self.device)
-        #print(img.shape)
         ort_inputs = {ort_sess.get_inputs()[0].name: img}
         ort_outs = ort_sess.run(None, ort_inputs)
-        #print(ort_outs.shape)
         result = softmax(ort_outs[0])
-        #result = F.softmax(ort_outs[0]).cpu().numpy()
         return result
-        #return ort_outs[0]
-        #return None
 
 
 

@@ -56,13 +56,14 @@ def test(image, model_dir, device_id):
         img = image_cropper.crop(**param)
         start = time.time()
         prediction += model_test.predict(img, os.path.join(model_dir, model_name))
+        #prediction += model_test.predict_onnx(img, './resources/FaceAnti.onnx')
         test_speed += time.time()-start
         count_model +=1
     # draw result of prediction
     label = np.argmax(prediction)
     value = prediction[0][label]/count_model
     if label == 1:
-        if value>=0.98:
+        if value>=0.99:
             print("Image '{}' is Real Face. Score: {:.2f}.".format(1, value))
             result_text = "RealFace Score: {:.2f}".format(value)
             color = (255, 0, 0)

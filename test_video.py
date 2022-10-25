@@ -43,8 +43,8 @@ if __name__ == '__main__':
             test(frame,args.model_dir, args.device_id) 
             cv2.imshow('face Capture', frame)
         count += 1
-        if count ==1:
-            break
+        #if count ==1:
+        #    break
         if cv2.waitKey(1)&0xFF == ord('q'):
             break
     cap.release()

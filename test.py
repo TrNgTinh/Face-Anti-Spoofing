@@ -29,7 +29,6 @@ def check_image(image):
     else:
         return True
 
-
 def test(image, model_dir, device_id):
     model_test = AntiSpoofPredict(device_id)
     image_cropper = CropImage()
@@ -62,23 +61,20 @@ def test(image, model_dir, device_id):
     # draw result of prediction
     label = np.argmax(prediction)
     value = prediction[0][label]/count_model
-    #print(prediction)
-
     if label == 1:
         if value>=0.98:
-            #print("Image '{}' is Real Face. Score: {:.2f}.".format(1, value))
+            print("Image '{}' is Real Face. Score: {:.2f}.".format(1, value))
             result_text = "RealFace Score: {:.2f}".format(value)
             color = (255, 0, 0)
         else:
-            #print("Image '{}' is Fake Face. Score: {:.2f}.".format(1, value))
+            print("Image '{}' is Fake Face. Score: {:.2f}.".format(1, value))
             result_text = "RealFace Score: {:.2f}".format(value)
             color = (0, 0, 255)
     else:
-        #print(label)
-        #print("Image '{}' is Fake Face. Score: {:.2f}.".format(1, value))
+        print("Image '{}' is Fake Face. Score: {:.2f}.".format(1, value))
         result_text = "FakeFace Score: {:.2f}".format(value)
         color = (0, 0, 255)
-    #print("Prediction cost {:.2f} s".format(test_speed))
+    print("Prediction cost {:.2f} s".format(test_speed))
     cv2.rectangle(
         image,
         (image_bbox[0], image_bbox[1]),
